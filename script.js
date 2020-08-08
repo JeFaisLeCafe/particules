@@ -7,28 +7,34 @@ const MOUSE_RADIUS = 200;
 const PARTICULE_BASE_SIZE = 3;
 const RETURN_TIME = 10; // "time" (inverted speed) that a particule will take to go back
 const DENSITY_FACTOR = 30;
-const PARTICULE_SPACING = 10;
-const ADJUST_X = 30;
-const ADJUST_Y = 30;
+const PARTICULE_SPACING = 20;
+const ADJUST_X = 0;
+const ADJUST_Y = 0;
+const MAX_LINK_RADIUS = 50; // max distance between two connected particules
+const BASE_COLOR = new RGBColour(255, 255, 255, 0.9);
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let particuleArray = [];
 
+function getDistance(ax, ay, bx, by) {
+  return Math.sqrt((bx - ax) ** 2 + (by - ay) ** 2);
+}
+
 // handle mouse
 const mouse = {
   x: null,
   y: null,
-  radius: MOUSE_RADIUS
+  radius: MOUSE_RADIUS,
 };
 
-window.addEventListener("mousemove", e => {
+window.addEventListener("mousemove", (e) => {
   mouse.x = e.x;
   mouse.y = e.y;
 });
 
-ctx.fillStyle = "white";
+ctx.fillStyle = "red";
 ctx.font = "30px Verdana";
 ctx.fillText("BITE", 0, 30);
 const textCoordinates = ctx.getImageData(0, 0, 100, 100);
@@ -42,15 +48,18 @@ class Particule {
     this.baseX = this.x;
     this.baseY = this.y;
     this.density = Math.random() * DENSITY_FACTOR + 1;
+    this.color = "white";
   }
 
   draw() {
-    ctx.fillStyle = "white";
+    // ctx.fillStyle = this.color.getCSSIntegerRGB();
+    ctx.fillStyle = this.color;
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
     ctx.closePath();
     ctx.fill();
   }
+
   update() {
     let dx = mouse.x - this.x;
     let dy = mouse.y - this.y;
@@ -64,11 +73,27 @@ class Particule {
     let directionX = forceDirectionX * force * this.density; // density is actually the opposite: the higher the number, the faster it moves
     let directionY = forceDirectionY * force * this.density; // density is actually the opposite: the higher the number, the faster it moves
 
-    if (distance < MOUSE_RADIUS) {
+    const inMouseRadius = distance < MOUSE_RADIUS;
+
+    //color handling (not working)
+    // if (this.x !== this.baseX && this.y !== this.baseY) {
+    //   this.color = new RGBColour(
+    //     (255 + distance) % 255,
+    //     (255 + distance) % 255,
+    //     (255 + distance) % 255,
+    //     inMouseRadius ? 1 : 0.8
+    //   );
+    // } else {
+    //   this.color = BASE_COLOR;
+    // }
+
+    if (inMouseRadius) {
       this.x -= directionX;
       this.y -= directionY;
+      this.color = "yellow";
     } else {
       // we are not in range of the mouse radius MOUSE_RADIUS
+      this.color = "white";
       if (this.x !== this.baseX) {
         dx = this.x - this.baseX;
         this.x -= dx / RETURN_TIME;
@@ -110,6 +135,28 @@ function animate() {
     particuleArray[i].draw();
     particuleArray[i].update();
   }
+  connect();
   requestAnimationFrame(animate);
 }
 animate();
+
+function connect() {
+  let opacityValue = 1;
+  for (let a = 0; a < particuleArray.length; a++) {
+    for (let b = a; b < particuleArray.length; b++) {
+      // b = a for optim, because previous link should have already been rendered
+      let dx = particuleArray[a].x - particuleArray[b].x;
+      let dy = particuleArray[a].y - particuleArray[b].y;
+      let distance = Math.sqrt(dx ** 2 + dy ** 2);
+      if (distance < MAX_LINK_RADIUS) {
+        opacityValue = 1 - distance / MAX_LINK_RADIUS;
+        ctx.strokeStyle = "rgba(255,255,255," + opacityValue + ")";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(particuleArray[a].x, particuleArray[a].y);
+        ctx.lineTo(particuleArray[b].x, particuleArray[b].y);
+        ctx.stroke();
+      }
+    }
+  }
+}
