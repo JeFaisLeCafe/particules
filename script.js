@@ -2,19 +2,32 @@ const canvas = document.getElementById("canvas1");
 const ctx = canvas.getContext("2d");
 
 // CONSTANTES
-const PARTICULE_NUMBER = 2000;
-const MOUSE_RADIUS = 100;
-const PARTICULE_BASE_SIZE = 3;
+const MOUSE_RADIUS = 80;
+const PARTICULE_BASE_SIZE = 4;
 const RETURN_TIME = 10; // "time" (inverted speed) that a particule will take to go back
-const DENSITY_FACTOR = 30;
-const PARTICULE_SPACING = 18;
-const ADJUST_X = 0;
-const ADJUST_Y = 0;
-const MAX_LINK_RADIUS = 50; // max distance between two connected particules
+const LIGHTNESS_FACTOR = 30; //
+const PARTICULE_SPACING = 15;
+const ADJUST_X = 5;
+const ADJUST_Y = -5;
+const MAX_LINK_RADIUS = PARTICULE_SPACING * 3; // max distance between two connected particules
 const BASE_COLOR = new RGBColour(255, 255, 255, 0.9);
 
+// handling user input
+// opacity scanning
+let opacityScanningInput = document.getElementById("opacityScanning");
+let MIN_OPACITY_SCANNING = opacityScanningInput.value;
+
+function onOpacityScanningChange(val) {
+  console.log(val);
+  MIN_OPACITY_SCANNING = val;
+  console.log(MIN_OPACITY_SCANNING);
+  init();
+}
+
+//////
+
 canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+canvas.height = window.innerHeight / 2;
 
 let particuleArray = [];
 
@@ -35,7 +48,7 @@ window.addEventListener("mousemove", (e) => {
 });
 
 ctx.fillStyle = "red";
-ctx.font = "27px Verdana";
+ctx.font = "27px Cousine";
 ctx.fillText("SOURY", 0, 30);
 const textCoordinates = ctx.getImageData(0, 0, 100, 100);
 
@@ -47,7 +60,7 @@ class Particule {
     this.size = PARTICULE_BASE_SIZE;
     this.baseX = this.x;
     this.baseY = this.y;
-    this.density = Math.random() * DENSITY_FACTOR + 1;
+    this.density = Math.random() * LIGHTNESS_FACTOR + 1;
     this.color = "white";
   }
 
@@ -112,7 +125,8 @@ function init() {
   for (let y = 0, y2 = textCoordinates.height; y < y2; y++) {
     for (let x = 0, x2 = textCoordinates.width; x < x2; x++) {
       if (
-        textCoordinates.data[y * 4 * textCoordinates.width + x * 4 + 3] > 128
+        textCoordinates.data[y * 4 * textCoordinates.width + x * 4 + 3] >
+        (255 * (10 - MIN_OPACITY_SCANNING)) / 10
       ) {
         // this is a check of opacity; every pixel is represented as 4 values between 0 & 255 in the textCoordinates array (R, G, B and Alpha); if 128 it mean 50% opacity
         let positionX = (x + ADJUST_X) * PARTICULE_SPACING;
@@ -138,6 +152,7 @@ function animate() {
   connect();
   requestAnimationFrame(animate);
 }
+
 animate();
 
 function connect() {

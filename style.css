@@ -10,7 +10,18 @@ body {
 }
 
 canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
+}
+
+.settings {
+  width: 100%;
+  height: 100%;
+  background-color: grey;
+}
+
+label {
+  font: 1rem "Fira Sans", sans-serif;
+}
+
+input {
+  margin: 0.4rem;
 }

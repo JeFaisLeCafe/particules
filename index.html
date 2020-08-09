@@ -1,17 +1,28 @@
 <!DOCTYPE html>
 <html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Particule Text</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Particule Text</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-  <canvas id="canvas1" width="300" height="300"></canvas>
-  <script type="text/javascript" src="Colour.js"></script>
-  <script src="script.js"></script>
-</body>
-
+  <body>
+    <canvas id="canvas1" width="300" height="300"></canvas>
+    <div class="settings">
+      <div class="opacityScanning">
+        <input
+          type="range"
+          id="opacityScanning"
+          name="opacityScanning"
+          min="1"
+          max="10"
+          onchange="onOpacityScanningChange(this.value)"
+        />
+        <label for="opacityScanning">Précision</label>
+      </div>
+    </div>
+    <script type="text/javascript" src="Colour.js"></script>
+    <script src="script.js"></script>
+  </body>
 </html>
