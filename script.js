@@ -35,7 +35,7 @@ window.addEventListener("mousemove", (e) => {
 });
 
 ctx.fillStyle = "red";
-ctx.font = "30px Verdana";
+ctx.font = "25px Verdana";
 ctx.fillText("SOURY", 0, 30);
 const textCoordinates = ctx.getImageData(0, 0, 100, 100);
 
