@@ -36,7 +36,7 @@ window.addEventListener("mousemove", (e) => {
 
 ctx.fillStyle = "red";
 ctx.font = "27px Verdana";
-ctx.fillText("SOURY", 0, 10);
+ctx.fillText("SOURY", 0, 30);
 const textCoordinates = ctx.getImageData(0, 0, 100, 100);
 
 // Particule
