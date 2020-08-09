@@ -3,7 +3,7 @@ const ctx = canvas.getContext("2d");
 
 // CONSTANTES
 const PARTICULE_NUMBER = 1000;
-const MOUSE_RADIUS = 180;
+const MOUSE_RADIUS = 100;
 const PARTICULE_BASE_SIZE = 3;
 const RETURN_TIME = 10; // "time" (inverted speed) that a particule will take to go back
 const DENSITY_FACTOR = 30;
@@ -35,8 +35,8 @@ window.addEventListener("mousemove", (e) => {
 });
 
 ctx.fillStyle = "red";
-ctx.font = "22px Verdana";
-ctx.fillText("SOURY", 0, 30);
+ctx.font = "25px Verdana";
+ctx.fillText("SOURY", 5, 20);
 const textCoordinates = ctx.getImageData(0, 0, 100, 100);
 
 // Particule
