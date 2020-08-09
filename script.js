@@ -3,11 +3,11 @@ const ctx = canvas.getContext("2d");
 
 // CONSTANTES
 const PARTICULE_NUMBER = 1000;
-const MOUSE_RADIUS = 200;
+const MOUSE_RADIUS = 180;
 const PARTICULE_BASE_SIZE = 3;
 const RETURN_TIME = 10; // "time" (inverted speed) that a particule will take to go back
 const DENSITY_FACTOR = 30;
-const PARTICULE_SPACING = 20;
+const PARTICULE_SPACING = 16;
 const ADJUST_X = 0;
 const ADJUST_Y = 0;
 const MAX_LINK_RADIUS = 50; // max distance between two connected particules
@@ -35,7 +35,7 @@ window.addEventListener("mousemove", (e) => {
 });
 
 ctx.fillStyle = "red";
-ctx.font = "25px Verdana";
+ctx.font = "22px Verdana";
 ctx.fillText("SOURY", 0, 30);
 const textCoordinates = ctx.getImageData(0, 0, 100, 100);
 
