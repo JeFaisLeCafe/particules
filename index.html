@@ -10,7 +10,7 @@
   <body>
     <canvas id="canvas1" width="300" height="300"></canvas>
     <div class="settings">
-      <div class="opacityScanning">
+      <div class="slider">
         <input
           type="range"
           id="opacityScanning"
@@ -19,7 +19,19 @@
           max="10"
           onchange="onOpacityScanningChange(this.value)"
         />
-        <label for="opacityScanning">Précision</label>
+        <label for="opacityScanning">Precision</label>
+      </div>
+
+      <div class="slider">
+        <input
+          type="range"
+          id="particuleSize"
+          name="particuleSize"
+          min="1"
+          max="10"
+          onchange="onParticuleSizeChange(this.value)"
+        />
+        <label for="particuleSize">Particule Size</label>
       </div>
     </div>
     <script type="text/javascript" src="Colour.js"></script>

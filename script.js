@@ -3,7 +3,6 @@ const ctx = canvas.getContext("2d");
 
 // CONSTANTES
 const MOUSE_RADIUS = 80;
-const PARTICULE_BASE_SIZE = 4;
 const RETURN_TIME = 10; // "time" (inverted speed) that a particule will take to go back
 const LIGHTNESS_FACTOR = 30; //
 const PARTICULE_SPACING = 15;
@@ -21,6 +20,14 @@ function onOpacityScanningChange(val) {
   console.log(val);
   MIN_OPACITY_SCANNING = val;
   console.log(MIN_OPACITY_SCANNING);
+  init();
+}
+
+// particule Size
+let particuleSizeInput = document.getElementById("particuleSize");
+let PARTICULE_BASE_SIZE = particuleSize.value;
+function onParticuleSizeChange(val) {
+  PARTICULE_BASE_SIZE = val;
   init();
 }
 
