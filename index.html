@@ -10,6 +10,13 @@
   <body>
     <canvas id="canvas1" width="300" height="300"></canvas>
     <div class="settings">
+      <input
+        type="text"
+        id="text"
+        name="text"
+        value="SOURY"
+        onchange="onTextChange(this.value)"
+      />
       <div class="slider">
         <input
           type="range"
@@ -32,6 +39,35 @@
           onchange="onParticuleSizeChange(this.value)"
         />
         <label for="particuleSize">Particule Size</label>
+      </div>
+
+      <div class="slider">
+        <input
+          type="range"
+          id="mouseRadius"
+          name="mouseRadius"
+          min="20"
+          max="200"
+          onchange="onMouseRadiusChange(this.value)"
+        />
+        <label for="mouseRadius">Mouse Radius</label>
+        <input
+          type="color"
+          id="baseColor"
+          name="baseColor"
+          value="#FFFFFF"
+          onchange="onBaseColorChange(this.value)"
+        />
+        <label for="baseColor">Primary Colour</label>
+
+        <input
+          type="color"
+          id="alternativeColor"
+          name="alternativeColor"
+          value="#FFFF00"
+          onchange="onAlternativeColorChange(this.value)"
+        />
+        <label for="alternativeColor">Alternative Colour</label>
       </div>
     </div>
     <script type="text/javascript" src="Colour.js"></script>

@@ -2,14 +2,14 @@ const canvas = document.getElementById("canvas1");
 const ctx = canvas.getContext("2d");
 
 // CONSTANTES
-const MOUSE_RADIUS = 80;
 const RETURN_TIME = 10; // "time" (inverted speed) that a particule will take to go back
 const LIGHTNESS_FACTOR = 30; //
 const PARTICULE_SPACING = 15;
 const ADJUST_X = 5;
 const ADJUST_Y = -5;
 const MAX_LINK_RADIUS = PARTICULE_SPACING * 3; // max distance between two connected particules
-const BASE_COLOR = new RGBColour(255, 255, 255, 0.9);
+
+let textCoordinates;
 
 // handling user input
 // opacity scanning
@@ -31,16 +31,54 @@ function onParticuleSizeChange(val) {
   init();
 }
 
+// mouse radius
+let mouseRadiusInput = document.getElementById("mouseRadius");
+let MOUSE_RADIUS = mouseRadiusInput.value;
+
+function onMouseRadiusChange(val) {
+  MOUSE_RADIUS = val;
+  mouse.radius = MOUSE_RADIUS;
+  init();
+}
+
+// colors
+let baseColorInput = document.getElementById("baseColor");
+let BASE_COLOR = baseColorInput.value;
+
+function onBaseColorChange(val) {
+  BASE_COLOR = val;
+  init();
+}
+
+let alternativeColorInput = document.getElementById("alternativeColor");
+let ALTERNATIVE_COLOR = alternativeColorInput.value;
+
+function onAlternativeColorChange(val) {
+  ALTERNATIVE_COLOR = val;
+  init();
+}
+
+// text change
+let textInput = document.getElementById("text");
+let TEXT = textInput.value;
+
+function onTextChange(val) {
+  console.log("VAL", val);
+  TEXT = val;
+  console.log(TEXT);
+  initAndScanText();
+  init();
+}
+
 //////
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight / 2;
-
-let particuleArray = [];
-
-function getDistance(ax, ay, bx, by) {
-  return Math.sqrt((bx - ax) ** 2 + (by - ay) ** 2);
+function initAndScanText() {
+  ctx.fillStyle = "white";
+  ctx.font = "27px Cousine";
+  ctx.fillText(TEXT, 0, 30);
+  textCoordinates = ctx.getImageData(0, 0, 100, 100);
 }
+initAndScanText();
 
 // handle mouse
 const mouse = {
@@ -54,10 +92,14 @@ window.addEventListener("mousemove", (e) => {
   mouse.y = e.y;
 });
 
-ctx.fillStyle = "red";
-ctx.font = "27px Cousine";
-ctx.fillText("SOURY", 0, 30);
-const textCoordinates = ctx.getImageData(0, 0, 100, 100);
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight / 2;
+
+let particuleArray = [];
+
+function getDistance(ax, ay, bx, by) {
+  return Math.sqrt((bx - ax) ** 2 + (by - ay) ** 2);
+}
 
 // Particule
 class Particule {
@@ -68,11 +110,10 @@ class Particule {
     this.baseX = this.x;
     this.baseY = this.y;
     this.density = Math.random() * LIGHTNESS_FACTOR + 1;
-    this.color = "white";
+    this.color = BASE_COLOR;
   }
 
   draw() {
-    // ctx.fillStyle = this.color.getCSSIntegerRGB();
     ctx.fillStyle = this.color;
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -93,27 +134,15 @@ class Particule {
     let directionX = forceDirectionX * force * this.density; // density is actually the opposite: the higher the number, the faster it moves
     let directionY = forceDirectionY * force * this.density; // density is actually the opposite: the higher the number, the faster it moves
 
-    const inMouseRadius = distance < MOUSE_RADIUS;
-
-    //color handling (not working)
-    // if (this.x !== this.baseX && this.y !== this.baseY) {
-    //   this.color = new RGBColour(
-    //     (255 + distance) % 255,
-    //     (255 + distance) % 255,
-    //     (255 + distance) % 255,
-    //     inMouseRadius ? 1 : 0.8
-    //   );
-    // } else {
-    //   this.color = BASE_COLOR;
-    // }
+    const inMouseRadius = distance <= MOUSE_RADIUS;
 
     if (inMouseRadius) {
       this.x -= directionX;
       this.y -= directionY;
-      this.color = "yellow";
+      this.color = ALTERNATIVE_COLOR;
     } else {
       // we are not in range of the mouse radius MOUSE_RADIUS
-      this.color = "white";
+      this.color = BASE_COLOR;
       if (this.x !== this.baseX) {
         dx = this.x - this.baseX;
         this.x -= dx / RETURN_TIME;
