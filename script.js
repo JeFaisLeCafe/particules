@@ -76,7 +76,7 @@ function initAndScanText() {
   ctx.fillStyle = "white";
   ctx.font = "27px Cousine";
   ctx.fillText(TEXT, 0, 30);
-  textCoordinates = ctx.getImageData(0, 0, 100, 100);
+  textCoordinates = ctx.getImageData(0, 0, 300, 300);
 }
 initAndScanText();
 
